@@ -1,10 +1,10 @@
 import express from 'express';
+import userController from '../controller/user';
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  
+router.get('/', userController.getAllStocks);
 
-});
 
-export default router;
+
+module.exports = router;
