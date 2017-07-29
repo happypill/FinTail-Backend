@@ -8,7 +8,7 @@ import path from 'path';
 import lessMiddleware from 'less-middleware';
 import index from './routes/index';
 import mongoose from 'mongoose';
-import alphavantageAPI from './routes/alphaVantage';
+import stock from './routes/stock';
 
 
 const app = express();
@@ -42,7 +42,7 @@ app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/apiAlphaVantage', alphavantageAPI);
+app.use('/stock', stock);
 
 
 // catch 404 and forward to error handler

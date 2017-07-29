@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 
 import User from '../models/User';
 
-/* Attaches user.id to req.session.passport.user */
+/* Attach user ID  to req.session.passport.user */
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
