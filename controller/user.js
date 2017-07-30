@@ -10,15 +10,12 @@ exports.getAllStocks = (req,res) => {
   })
 }
 
-
-
 exports.postStock = (req,res) => {
   const newUserStock = new User({
     preference:{
       stockname:req.body.stockname,
       entryPrice: req.body.entryPrice
     }
-
   });
 
   newUserStock.save((err) => {
