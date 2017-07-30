@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import User from '../models/User';
-import userController from '../controller/users';
+
 
 const router = express.Router();
 
