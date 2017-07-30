@@ -1,3 +1,4 @@
+import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import Debug from 'debug';
@@ -9,8 +10,8 @@ import path from 'path';
 import lessMiddleware from 'less-middleware';
 import index from './routes/index';
 import mongoose from 'mongoose';
-import stock from './routes/stock';
-
+import passport from 'passport';
+import user from './routes/index'
 
 dotenv.load({path: '.env'});
 
@@ -25,14 +26,12 @@ mongoose.connection.on('error', (err) => {
 
 
 const app = express();
-//port setup
-app.set('port', process.env.PORT);
-
-
 const debug = Debug('fin-tail-backend:app');
-
 const server = require('http').Server(app);
-
+/**
+ * API keys and Passport configuration.
+ */
+const passportConfig = require('./config/passport');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,8 +49,25 @@ app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const MongoStore = require('connect-mongo')(session);
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: "WDI Singapore",
+  store: new MongoStore({
+    url: 'mongodb://localhost/Fintail',
+    autoReconnect: true,
+    clear_interval: 3600
+  })
+}));
+
+/* Make passport for app to access .Passport will update user session with auntethication*/
+app.use(passport.initialize());
+app.use(passport.session());
+
+/*Routes that is used for app*/
 app.use('/', index);
-app.use('/stock', stock);
+app.use('/user', user);
 
 
 // catch 404 and forward to error handler

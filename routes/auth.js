@@ -82,9 +82,7 @@ router.get('/logout',(req, res, next) => {
   console.log('logged out successfully!');
 });
 
-router.delete('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
-router.put('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
-router.put('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
+
 
 
 export default router;
