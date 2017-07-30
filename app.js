@@ -8,10 +8,12 @@ import dotenv from 'dotenv';
 // import favicon from 'serve-favicon';
 import path from 'path';
 import lessMiddleware from 'less-middleware';
-import index from './routes/index';
+
 import mongoose from 'mongoose';
 import passport from 'passport';
-import user from './routes/index'
+
+import index from './routes/index';
+import auth from './routes/auth';
 
 dotenv.load({path: '.env'});
 
@@ -67,7 +69,7 @@ app.use(passport.session());
 
 /*Routes that is used for app*/
 app.use('/', index);
-app.use('/user', user);
+app.use('/auth', auth);
 
 
 // catch 404 and forward to error handler
