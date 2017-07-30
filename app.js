@@ -25,12 +25,14 @@ mongoose.connection.on('error', (err) => {
 
 
 const app = express();
+//port setup
+app.set('port', process.env.PORT);
+
+
 const debug = Debug('fin-tail-backend:app');
 
 const server = require('http').Server(app);
 
-//port setup
-app.set('port', process.env.PORT || 3001);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -75,6 +77,7 @@ process.on('uncaughtException', (err) => {
   debug('Caught exception: %j', err);
   process.exit(1);
 });
+
 server.listen(app.get('port'), () => {
   console.log('App is running at http://localhost:' + app.get('port')); 
 });
