@@ -4,8 +4,16 @@ import User from '../models/User';
 
 exports.getAllStocks = (req,res) => {
   //.populate Stock Name
-  User.find({}).populate('stockname').exec( (err,stock) => {
-    console.log(stock)
+  User.find({}).populate('stockname').exec((err,user) => {
+    console.log(user)
+    res.json(user);
+  })
+}
+
+exports.getSpecificStocks= (req, res) => {
+    //.Find speicfic stock relating to the user.id
+  User.findOne({'_id':req.params.user_id},(err,user) => {
+    if(err){console.log(err); return;}
     res.json(stock);
   })
 }
