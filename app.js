@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import Debug from 'debug';
 import express from 'express';
 import logger from 'morgan';
+import dotenv from 'dotenv';
 // import favicon from 'serve-favicon';
 import path from 'path';
 import lessMiddleware from 'less-middleware';
@@ -11,19 +12,25 @@ import mongoose from 'mongoose';
 import stock from './routes/stock';
 
 
-const app = express();
-const debug = Debug('fin-tail-backend:app');
-
-
+dotenv.load({path: '.env'});
 
 // Connect to mongo
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Fintail');
+mongoose.connect(process.env.REMOTEDB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();
 });
+
+
+const app = express();
+const debug = Debug('fin-tail-backend:app');
+
+const server = require('http').Server(app);
+
+//port setup
+app.set('port', process.env.PORT || 3001);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -67,6 +74,9 @@ app.use((err, req, res, next) => {
 process.on('uncaughtException', (err) => {
   debug('Caught exception: %j', err);
   process.exit(1);
+});
+server.listen(app.get('port'), () => {
+  console.log('App is running at http://localhost:' + app.get('port')); 
 });
 
 export default app;
