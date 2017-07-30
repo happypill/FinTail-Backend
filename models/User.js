@@ -9,8 +9,11 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true},
   password: String,
   preference: [
-    {tickr:String,
-     entryPrice: Number
+    tickr:String,
+    {
+     volume: Number,
+     entryPrice: Number,
+     totalPrice: Number
   }]
 }, { timestamps: true });
 
