@@ -10,7 +10,7 @@ router.get('/user', (req, res, next) => {
   if(!req.user){
     res.json(req.user);
   }else{
-    User.findOne({'_id': req.user._id}).populate('stock').exec((err,user) => {
+    User.findOne({'_id': req.user._id}).populate('').exec((err,user) => {
       if(err){console.log(err); return;}
       res.json(user);
     })
@@ -64,7 +64,6 @@ router.post('/login', function(req, res, next) {
         if(!user) {
           return res.json({'error':'user','message': "Wrong password or email"})
         }
-        /* req.login is a passport function that calls passport.serializeUser in passport.js */
         req.logIn(user, function(err) {
             if (err) {
               console.log("Login err", "Wrong password");

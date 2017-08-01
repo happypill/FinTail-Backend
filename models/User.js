@@ -8,15 +8,12 @@ const userSchema = new mongoose.Schema({
   username: { type: String, unique: true},
   email: { type: String, unique: true},
   password: String,
-  preference:[
-    {tickr:[
-       {name:String,
+  preference:[{
+       name:String,
        volume:Number,
        entryPrice:Number,
-       totalPrice: Number}  
-     ]
-    }
-  ]
+       totalPrice: Number
+     }]
 }, { timestamps: true });
 
 /**
