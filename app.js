@@ -14,6 +14,7 @@ import passport from 'passport';
 
 import index from './routes/index';
 import auth from './routes/auth';
+import preference from './routes/preference';
 
 dotenv.load({path: '.env'});
 
@@ -70,6 +71,7 @@ app.use(passport.session());
 /*Routes that is used for app*/
 app.use('/', index);
 app.use('/auth', auth);
+app.use('/preference',preference);
 
 
 // catch 404 and forward to error handler
