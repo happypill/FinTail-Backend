@@ -1,29 +1,40 @@
+import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import Debug from 'debug';
 import express from 'express';
 import logger from 'morgan';
+import dotenv from 'dotenv';
 // import favicon from 'serve-favicon';
 import path from 'path';
 import lessMiddleware from 'less-middleware';
-import index from './routes/index';
+
 import mongoose from 'mongoose';
-import alphavantageAPI from './routes/alphaVantage';
+import passport from 'passport';
 
+import index from './routes/index';
+import auth from './routes/auth';
+import preference from './routes/preference';
 
-const app = express();
-const debug = Debug('fin-tail-backend:app');
-
-
+dotenv.load({path: '.env'});
 
 // Connect to mongo
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Fintail');
+mongoose.connect(process.env.REMOTEDB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();
 });
+
+
+const app = express();
+const debug = Debug('fin-tail-backend:app');
+const server = require('http').Server(app);
+/**
+ * API keys and Passport configuration.
+ */
+const passportConfig = require('./config/passport');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,8 +52,26 @@ app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const MongoStore = require('connect-mongo')(session);
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: "WDI Singapore",
+  store: new MongoStore({
+    url: 'mongodb://localhost/Fintail',
+    autoReconnect: true,
+    clear_interval: 3600
+  })
+}));
+
+/* Make passport for app to access .Passport will update user session with auntethication*/
+app.use(passport.initialize());
+app.use(passport.session());
+
+/*Routes that is used for app*/
 app.use('/', index);
-app.use('/apiAlphaVantage', alphavantageAPI);
+app.use('/auth', auth);
+app.use('/preference',preference);
 
 
 // catch 404 and forward to error handler
@@ -67,6 +96,10 @@ app.use((err, req, res, next) => {
 process.on('uncaughtException', (err) => {
   debug('Caught exception: %j', err);
   process.exit(1);
+});
+
+server.listen(app.get('port'), () => {
+  console.log('App is running at http://localhost:' + app.get('port')); 
 });
 
 export default app;
