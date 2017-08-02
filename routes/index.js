@@ -1,5 +1,4 @@
 import express from 'express';
-import userController from '../controller/user';
 import request from 'request';
 import User from '../models/User';
 
@@ -12,10 +11,8 @@ router.get('/', (req, res, next) => {
   });
 });
 
-/*POST USER PREFERENCE TO DASHBOARD*/
-router.post('/dashboard', (req, res, next)=> {
 
-});
+
 
 
 export default router;
