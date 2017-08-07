@@ -20,7 +20,7 @@ dotenv.load({path: '.env'});
 
 // Connect to mongo
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://admin:admin@ds161041.mlab.com:61041/heroku_8bpj4m23');
+mongoose.connect(process.env.REMOTEDB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
