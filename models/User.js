@@ -9,10 +9,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true},
   password: String,
   preference:[{
-       name:String,
-       volume:Number,
-       entryPrice:Number,
-       totalPrice: Number
+       name: String,
+       volume: {type: Number, default: 0},
+       entryPrice: {type: Number, default: 0},
+       totalPrice: {type: Number, default: 0}
      }]
 }, { timestamps: true });
 
